@@ -8,3 +8,6 @@
 - [ROS AprilTags](http://wiki.ros.org/apriltag_ros)
 - [ROS explore_lite](http://wiki.ros.org/explore_lite) (for exploring unmapped areas)
 
+## Running
+1. Build: `catkin_make`
+2. Source: `source devel/setup.bash`
