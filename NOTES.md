@@ -4,7 +4,7 @@ Tutorial: https://emanual.robotis.com/docs/en/platform/turtlebot3/quick-start/#p
 
 Turtlebot dependancies:
 ```
-sudo apt-get install ros-noetic-joy ros-noetic-teleop-twist-joy \
+sudo apt install ros-noetic-joy ros-noetic-teleop-twist-joy \
     ros-noetic-teleop-twist-keyboard ros-noetic-laser-proc \
     ros-noetic-rgbd-launch ros-noetic-depthimage-to-laserscan \
     ros-noetic-rosserial-arduino ros-noetic-rosserial-python \
@@ -17,9 +17,10 @@ sudo apt-get install ros-noetic-joy ros-noetic-teleop-twist-joy \
 
 Turtlebot:
 ```
-sudo apt-get install ros-noetic-dynamixel-sdk \
+sudo apt install ros-noetic-dynamixel-sdk \
     ros-noetic-turtlebot3-msgs \
-    ros-noetic-turtlebot3
+    ros-noetic-turtlebot3 \ 
+    ros-noetic-turtlebot3-gazebo
 ```
 
 Default to turtlebot burger:
