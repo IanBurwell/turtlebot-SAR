@@ -191,6 +191,7 @@ install(FILES
 #   # myfile1
 #   # myfile2
      exploration.launch
+     turtlebot.launch
      DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
  )
 

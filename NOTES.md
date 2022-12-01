@@ -40,3 +40,15 @@ Tutorial: https://emanual.robotis.com/docs/en/platform/turtlebot3/slam_simulatio
 - SLAM: `roslaunch turtlebot3_slam turtlebot3_slam.launch slam_methods:=gmapping`
 - Save the map: `rosrun map_server map_saver -f ~/map`
 - Navigation: `roslaunch turtlebot3_navigation turtlebot3_navigation.launch map_file:=$HOME/map.yaml`
+
+
+# TODO:
+- static transform camera transform 
+- launch file include remote and rviz
+- apriltags config (and print out)
+- create launch file for turtlebot
+- pinging issue
+
+roslaunch turtlebot3_bringup turtlebot3_rpicamera.launch
+roslaunch turtlebot3_bringup turtlebot3_remote.launch
+roslaunch apriltag_ros continuous_detection.launch camera_name:="camera" image_topic:="image"
