@@ -10,14 +10,14 @@
     <rosparam command="load" file="$(find turtlebot_sar)/config/settings.yaml"/>
     <rosparam command="load" file="$(find turtlebot_sar)/config/tags.yaml"/>
   </node>
-  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_rpicamera.launch"
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_rpicamera.launch"/>
 
 
   <!-- turtlebot bringup -->
   <include file="$(find turtlebot3_bringup)/launch/turtlebot3_robot.launch"/>
 
   <!-- camera static transform -->
-  <node pkg="tf" type="static_transform_publisher" name="camera_tf" args="0 0 0.07 0 -90 0 base_link camera 100" />
+  <node pkg="tf" type="static_transform_publisher" name="camera_tf" args="0 0 0.123 0 -1.57 0 base_link camera 100" />
 
 
 </launch>
