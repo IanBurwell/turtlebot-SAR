@@ -10,6 +10,8 @@
     <rosparam command="load" file="$(find turtlebot_sar)/config/settings.yaml"/>
     <rosparam command="load" file="$(find turtlebot_sar)/config/tags.yaml"/>
   </node>
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_rpicamera.launch"
+
 
   <!-- turtlebot bringup -->
   <include file="$(find turtlebot3_bringup)/launch/turtlebot3_robot.launch"/>
