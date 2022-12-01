@@ -7,8 +7,8 @@
     <param name="queue_size" type="int" value="1" />
 
     <!-- load parameters (incl. tag family, tags, etc.) -->
-    <rosparam command="load" file="$(find turtlebart_sar)/config/settings.yaml"/>
-    <rosparam command="load" file="$(find turtlebart_sar)/config/tags.yaml"/>
+    <rosparam command="load" file="$(find turtlebot_sar)/config/settings.yaml"/>
+    <rosparam command="load" file="$(find turtlebot_sar)/config/tags.yaml"/>
   </node>
 
   <!-- turtlebot bringup -->
