@@ -3,7 +3,8 @@
   <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="cmd_vel_topic" default="/cmd_vel" />
   <arg name="odom_topic" default="odom" />
-  <arg name="move_forward_only" default="false"/>
+  <arg name="move_forward_only" default="true"/>
+  <arg name="sim" default="false"/>
 
   <!-- SLAM -->
   <node pkg="gmapping" type="slam_gmapping" name="gmapping_node" output="log">
@@ -37,12 +38,17 @@
   </node>
   
   <!-- explore lite -->
-  <node pkg="explore_lite" type="explore" respawn="true" name="explore" output="screen">
+  <node pkg="explore_lite" type="explore" respawn="true" name="explore" output="log">
     <rosparam file="$(find turtlebot_sar)/config/exploration.yaml" command="load" />
   </node>
 
   <!-- turtlebot -->
   <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch"/>
+  <group if="$(arg sim)">
+    <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_house.launch">
+      <arg name="model" value="$(arg model)"/>
+    </include>
+  </group>
 
   <!-- rviz -->
   <node pkg="rviz" type="rviz" name="rviz" required="true"

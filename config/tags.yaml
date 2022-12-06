@@ -21,7 +21,12 @@
 #   ]
 standalone_tags:
   [
-    {id: 0, size: 0.105, name: Survivor}
+    {id: 0, size: 0.161, name: Survivor0},
+    {id: 1, size: 0.161, name: Survivor1},
+    {id: 2, size: 0.161, name: Survivor2},
+    {id: 3, size: 0.161, name: Survivor3},
+    {id: 4, size: 0.161, name: Survivor4},
+    {id: 5, size: 0.161, name: Survivor5},
   ]
 # ## Tag bundle definitions
 # ### Remarks
