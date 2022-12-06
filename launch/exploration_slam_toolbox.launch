@@ -6,9 +6,9 @@
   <arg name="move_forward_only" default="false"/>
 
   <!-- SLAM -->
-  <node pkg="slam_toolbox" type="async_slam_toolbox_node" name="slam_toolbox" output="screen">
+  <node pkg="slam_toolbox" type="lifelong_slam_toolbox_node" name="slam_toolbox" output="screen">
   <param name="base_frame" value="base_link" />
-    <param name="max_laser_range" value="5.0" />
+    <param name="max_laser_range" value="3.3" />
     <param name="odom_frame" value="odom" />
     <param name="map_update_interval" value="1" />
   </node>
