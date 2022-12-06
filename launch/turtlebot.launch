@@ -17,7 +17,7 @@
   <include file="$(find turtlebot3_bringup)/launch/turtlebot3_robot.launch"/>
 
   <!-- camera static transform -->
-  <node pkg="tf" type="static_transform_publisher" name="camera_tf" args="0 0 0.123 0 -1.57 0 base_link camera 100" />
+  <node pkg="tf" type="static_transform_publisher" name="camera_tf" args="0 0 0.123 3.1415 -1.57 3.1415 base_link camera 100" />
 
 
 </launch>
