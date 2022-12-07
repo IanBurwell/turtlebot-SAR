@@ -6,7 +6,7 @@
   <arg name="move_forward_only" default="true"/>
 
   <!-- SLAM -->
-  <node pkg="slam_toolbox" type="lifelong_slam_toolbox_node" name="slam_toolbox" output="log">
+  <node pkg="slam_toolbox" type="lifelong_slam_toolbox_node" name="slam_toolbox" output="screen">
   <param name="base_frame" value="base_link" />
     <param name="max_laser_range" value="3.3" />
     <param name="odom_frame" value="odom" />
