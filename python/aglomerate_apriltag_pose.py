@@ -34,9 +34,14 @@ def calc_optimal_R_orientation(T_rob_tag,target_pos_r):
 
     return quat
 
-def average_tag(T_w_tag_new,T_w_tag,data_num):
+def average_tag(T_w_tag_new,tag_entry):
 
-    T_av = (T_w_tag_new + data_num*T_w_tag)/(data_num+1)
+    (T_w_tag, data_num) = tag_entry
+
+    if data_num == 0:
+        T_av = T_w_tag_new
+    else:
+        T_av = (T_w_tag_new + data_num*T_w_tag)/(data_num+1)
 
     return (T_av, data_num+1)
 
