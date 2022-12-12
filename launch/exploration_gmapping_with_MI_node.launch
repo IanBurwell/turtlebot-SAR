@@ -1,0 +1,76 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="odom" />
+  <arg name="move_forward_only" default="false"/>
+  <arg name="sim" default="false"/>
+
+  <!-- SLAM -->
+  <node pkg="gmapping" type="slam_gmapping" name="gmapping_node" output="log">
+  <param name="base_frame" value="base_link" />
+    <param name="odom_frame" value="odom" />
+    <param name="delta" value="0.01" />
+    <param name="xmin" value="-5" />
+    <param name="ymin" value="-5" />
+    <param name="xmax" value="5" />
+    <param name="ymax" value="5" />
+    <param name="maxUrange" value="5" />
+    <param name="map_update_interval" value="1" />
+    <param name="linearUpdate" value="0.05" />
+    <param name="angularUpdate" value="0.05" />
+    <param name="temporalUpdate" value="0.1" />
+    <param name="particles" value="100" />
+  </node>
+
+  <!-- move_base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="log">
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find turtlebot3_navigation)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+  </node>
+
+  <!-- movement intermediary-->
+  <node pkg="turtlebot_sar" type="movement_intermediary.py" name="movement_intermediary"/>
+  
+  <!-- explore lite -->
+  <node pkg="turtlebot_sar" type="camera_mapper.py" name="cam_mapper"/>
+  <node pkg="explore_lite" type="explore" respawn="true" name="explore" output="log">
+    <rosparam file="$(find turtlebot_sar)/config/exploration.yaml" command="load" />
+    <remap from="map" to="map_camera"/>
+    <remap from="move_base/goal" to="movement_intermediary/goal"/>
+    <remap from="move_base/cancel" to="movement_intermediary/cancel"/>
+    <remap from="move_base/feedback" to="movement_intermediary/feedback"/>
+    <remap from="move_base/status" to="movement_intermediary/status"/>
+    <remap from="move_base/result" to="movement_intermediary/result"/>
+  </node>
+
+  <!-- turtlebot -->
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch"/>
+  <group if="$(arg sim)">
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="$(find turtlebot_sar)/config/house_modified.world"/>
+      <arg name="paused" value="false"/>
+      <arg name="use_sim_time" value="true"/>
+      <arg name="gui" value="true"/>
+      <arg name="headless" value="false"/>
+      <arg name="debug" value="false"/>
+    </include>
+
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model turtlebot3 -x -3 -y 1 -z 0 -param robot_description" />
+  </group>
+
+  <!-- rviz -->
+  <node pkg="rviz" type="rviz" name="rviz" required="true"
+      args="-d $(find turtlebot_sar)/rviz/turtlebot3_frontier_exploration.rviz"/>
+
+</launch>
