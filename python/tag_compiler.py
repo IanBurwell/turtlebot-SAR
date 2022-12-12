@@ -13,7 +13,7 @@ def tag_check_new(tag_ID,tag_dict):
 
 def tag_detected(tag_ID,T_c_tag,T_w_tag,max_detect_dis, max_detect_angle, max_comp_dis, max_comp_angle,tag_dict,tag_queue):
     #Checks if detection is valid (not necessarily valid for composition)
-    if aglomerate_apriltag_pose.check_valid_meaurement(T_c_tag,max_detect_angle,max_detect_angle,max_detect_dis):
+    if aglomerate_apriltag_pose.check_valid_measurement(T_c_tag,max_detect_angle,max_detect_angle,max_detect_dis):
         #Checks if tag is already in tag dictionary(Already detected) and add it and world frame pose to list if it isn't
         #Also will add it to queue
         if tag_check_new(tag_ID,tag_dict):
@@ -21,7 +21,7 @@ def tag_detected(tag_ID,T_c_tag,T_w_tag,max_detect_dis, max_detect_angle, max_co
             hq.heappush(tag_queue, tag_ID)
 
         #Checks if measurement is valid for updating compiled pose estimate
-        if aglomerate_apriltag_pose.check_valid_meaurement(T_c_tag,max_comp_angle,max_comp_angle, max_comp_dis):
+        if aglomerate_apriltag_pose.check_valid_measurement(T_c_tag,max_comp_angle,max_comp_angle, max_comp_dis):
                 comp_tag = aglomerate_apriltag_pose.average_tag(T_w_tag,tag_dict[tag_ID])
                 tag_dict.update({tag_ID:comp_tag})
 
@@ -31,4 +31,4 @@ def tag_detected(tag_ID,T_c_tag,T_w_tag,max_detect_dis, max_detect_angle, max_co
 
 
 
-def find_goal_pose():
+def find_goal_pose(T_rob_tag):

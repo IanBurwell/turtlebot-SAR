@@ -45,9 +45,9 @@ def average_tag(T_w_tag_new,tag_entry):
 
     return (T_av, data_num+1)
 
-def check_valid_meaurement(T_c_tag,max_theta,max_phi,max_dis):
+def check_valid_measurement(T_c_tag,max_theta,max_phi,max_dis):
 
-    [theta,phi,dis] = calc_z_deviation(T_c_tag)
+    [theta,phi,dis] = calc_z_deviation(T_c_tag.position)
 
     if (abs(theta) <= max_theta) & (abs(phi) <= max_phi) & (dis <= max_dis):
         return True
