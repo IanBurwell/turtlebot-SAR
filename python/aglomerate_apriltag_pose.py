@@ -1,14 +1,15 @@
 
 import numpy as np
+from geometry_msgs.msg import Pose
 
 #Determines how far april tag measurement is from z-axis of camera (~x-axis of robot frame) + Distance
 def calc_z_deviation(temp_tag_pos):
     #horizontal angle
-    theta = np.arctan2(temp_tag_pos[0],temp_tag_pos[2])
+    theta = np.arctan2(temp_tag_pos.x, temp_tag_pos.z)
     #vertical angle
-    phi = np.arctan2(temp_tag_pos[1],temp_tag_pos[2])
+    phi = np.arctan2(temp_tag_pos.y,temp_tag_pos.z)
     #Distance
-    dis = np.sum(temp_tag_pos**2)
+    dis = np.sqrt(temp_tag_pos.x**2 + temp_tag_pos.y**2 + temp_tag_pos.z**2)
 
     return [theta, phi, dis]
 
@@ -34,14 +35,32 @@ def calc_optimal_R_orientation(T_rob_tag,target_pos_r):
 
     return quat
 
-def average_tag(T_w_tag_new,tag_entry):
+def average_tag(T_w_tag_new, tag_entry):
+   
+    T_w_tag_new = T_w_tag_new.pose
 
     (T_w_tag, data_num) = tag_entry
+
+    T_av = Pose()
 
     if data_num == 0:
         T_av = T_w_tag_new
     else:
-        T_av = (T_w_tag_new + data_num*T_w_tag)/(data_num+1)
+        T_av.position.x = (T_w_tag_new.position.x + data_num * T_w_tag.position.x)/(data_num+1)
+        T_av.position.y = (T_w_tag_new.position.y + data_num * T_w_tag.position.y)/(data_num+1)
+        T_av.position.z = (T_w_tag_new.position.z + data_num * T_w_tag.position.z)/(data_num+1)
+
+        T_av.orientation.x = (T_w_tag_new.orientation.x + data_num * T_w_tag.orientation.x)/(data_num+1)
+        T_av.orientation.y = (T_w_tag_new.orientation.y + data_num * T_w_tag.orientation.y)/(data_num+1)
+        T_av.orientation.z = (T_w_tag_new.orientation.z + data_num * T_w_tag.orientation.z)/(data_num+1)
+        T_av.orientation.w = (T_w_tag_new.orientation.w + data_num * T_w_tag.orientation.w)/(data_num+1)
+
+        # normalize quaternion
+        norm = np.sqrt(T_av.orientation.x**2 + T_av.orientation.y**2 + T_av.orientation.z**2 + T_av.orientation.w**2)
+        T_av.orientation.x = T_av.orientation.x/norm
+        T_av.orientation.y = T_av.orientation.y/norm
+        T_av.orientation.z = T_av.orientation.z/norm
+        T_av.orientation.w = T_av.orientation.w/norm
 
     return (T_av, data_num+1)
 

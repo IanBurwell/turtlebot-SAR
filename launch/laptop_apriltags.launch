@@ -1,0 +1,20 @@
+<launch>
+  <!-- apriltag -->
+  <node pkg="apriltag_ros" type="apriltag_ros_continuous_node" name="apriltag_ros_continuous_node" clear_params="true" output="screen" launch-prefix="">
+    <remap from="image_rect" to="cv_camera_node/image_raw" />
+    <remap from="camera_info" to="cv_camera_node/camera_info" />
+    <param name="publish_tag_detections_image" type="bool" value="true" />
+    <param name="queue_size" type="int" value="1" />
+
+    <!-- load parameters (incl. tag family, tags, etc.) -->
+    <rosparam command="load" file="$(find turtlebot_sar)/config/settings.yaml"/>
+    <rosparam command="load" file="$(find turtlebot_sar)/config/tags.yaml"/>
+  </node>
+
+  <!-- cv_camera -->
+  <node pkg="cv_camera" type="cv_camera_node" name="cv_camera_node" output="screen" />
+
+  <!-- identity transform between map and camera frames -->
+  <node pkg="tf" type="static_transform_publisher" name="map_to_camera" args="0 0 0 0 0 0 map camera 100" />
+  
+</launch>
