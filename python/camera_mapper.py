@@ -108,7 +108,7 @@ def publish_map():
 
 
 
-def main():
+def setup():
     global pub, listener
     rospy.init_node('camera_mapper')
 
@@ -124,17 +124,27 @@ def main():
     # Create a tf listener
     listener = tf.TransformListener()
 
+
+def loop():
     r = rospy.Rate(1)
     while not rospy.is_shutdown():
         r.sleep()
 
         publish_map()
     # rospy.spin()
-            
 
 
 if __name__ == '__main__':
-    try:
-        main()
-    except rospy.ROSInterruptException:
-        pass
+    done = False
+    setup()
+    while not done:
+        try:    
+            loop()
+            done = True
+        except rospy.ROSInterruptException:
+            done = True
+        except KeyboardInterrupt:
+            done = True
+        except:
+            pass
+        

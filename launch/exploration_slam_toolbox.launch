@@ -3,7 +3,7 @@
   <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
   <arg name="cmd_vel_topic" default="/cmd_vel" />
   <arg name="odom_topic" default="odom" />
-  <arg name="move_forward_only" default="true"/>
+  <arg name="move_forward_only" default="false"/>
 
   <!-- SLAM -->
   <node pkg="slam_toolbox" type="lifelong_slam_toolbox_node" name="slam_toolbox" output="screen">
@@ -32,7 +32,7 @@
   <node pkg="turtlebot_sar" type="camera_mapper.py" name="cam_mapper"/>
   <node pkg="explore_lite" type="explore" respawn="true" name="explore" output="log">
     <rosparam file="$(find turtlebot_sar)/config/exploration.yaml" command="load" />
-    <!-- <remap from="map" to="map_camera"/> -->
+    <remap from="map" to="map_camera"/>
   </node>
 
   <!-- turtlebot -->
