@@ -1,0 +1,50 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="odom" />
+  <arg name="move_forward_only" default="true"/>
+
+  <!-- SLAM -->
+  <node pkg="slam_toolbox" type="lifelong_slam_toolbox_node" name="slam_toolbox" output="screen">
+  <param name="base_frame" value="base_link" />
+    <param name="max_laser_range" value="3.3" />
+    <param name="odom_frame" value="odom" />
+    <param name="map_update_interval" value="1" />
+    <param name="resolution" value="0.02" />
+  </node>
+
+  <!-- move_base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find turtlebot3_navigation)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+  </node>
+  
+  <!-- explore lite -->
+  <node pkg="turtlebot_sar" type="camera_mapper.py" name="cam_mapper"/>
+  <node pkg="explore_lite" type="explore" respawn="true" name="explore" output="log">
+    <rosparam file="$(find turtlebot_sar)/config/exploration.yaml" command="load" />
+    <remap from="move_base/goal" to="movement_intermediary/goal"/>
+    <remap from="move_base/cancel" to="movement_intermediary/cancel"/>
+    <remap from="move_base/feedback" to="movement_intermediary/feedback"/>
+    <remap from="move_base/status" to="movement_intermediary/status"/>
+    <remap from="move_base/result" to="movement_intermediary/result"/>
+    <!-- <remap from="map" to="map_camera"/> -->
+  </node>
+
+  <!-- turtlebot -->
+  <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch"/>
+
+  <!-- rviz -->
+  <node pkg="rviz" type="rviz" name="rviz" required="true"
+      args="-d $(find turtlebot_sar)/rviz/turtlebot3_frontier_exploration.rviz"/>
+
+</launch>
