@@ -19,7 +19,7 @@ def calc_valid_R_pos(max_dis,min_dis,max_valid_angle,T_c_tag,N):
     dis = np.random.uniform(min_dis,max_dis,N)
     z= dis*np.cos(theta)
     x = dis*np.sin(theta)
-    y = -T_c_tag.Point[2]
+    y = -T_c_tag.position.y
     pos_tag_target = [x,y,z]
 
     return pos_tag_target
@@ -55,4 +55,4 @@ def check_valid_measurement(T_c_tag,max_theta,max_phi,max_dis):
         return False
 
 #check if target position is occupied
-def check_valid_pos():
+#def check_valid_pos():

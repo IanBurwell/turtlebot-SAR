@@ -25,10 +25,10 @@ def tag_detected(tag_ID,T_c_tag,T_w_tag,max_detect_dis, max_detect_angle, max_co
                 comp_tag = aglomerate_apriltag_pose.average_tag(T_w_tag,tag_dict[tag_ID])
                 tag_dict.update({tag_ID:comp_tag})
 
-        return True
+        return comp_tag
     else:
         return False
 
 
 
-def find_goal_pose(T_rob_tag):
+#def find_goal_pose(T_rob_tag):
